@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ObjectMapper
 
 class WebService: REST {
     let directoryURL = AppManager.baseURL + "directory"
@@ -45,11 +46,7 @@ class WebService: REST {
         let savedIndividuals = realm.objects(Individual.self)
         if (savedIndividuals.count > 0) {
             DLog("Loaded \(savedIndividuals.count) individuals from database.")
-            let converted = savedIndividuals.reduce(List<Individual>()) { (list, element) -> List<Individual> in
-                list.append(element)
-                return list
-            }
-            closureIndividuals(converted)
+            closureIndividuals(self.convertResultsToList(savedIndividuals))
             return
         }
         
@@ -60,16 +57,8 @@ class WebService: REST {
                 }
             }
             let savedIndividuals = realm.objects(Individual.self)
-            if (savedIndividuals.count > 0) {
-                DLog("Written \(savedIndividuals.count) individuals from internet to database.")
-                let converted = savedIndividuals.reduce(List<Individual>()) { (list, element) -> List<Individual> in
-                    list.append(element)
-                    return list
-                }
-                closureIndividuals(converted)
-                return
-            }
-            closureIndividuals(List<Individual>())
+            DLog("Written \(savedIndividuals.count) individuals from internet to database.")
+            closureIndividuals(self.convertResultsToList(savedIndividuals))
         }
         
         

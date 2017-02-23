@@ -34,4 +34,12 @@ class REST: NSObject {
             
         }
     }
+    
+    func convertResultsToList<T:Mappable>(_ results: Results<T>) -> List<T> {
+        let converted = results.reduce(List<T>()) { (list, element) -> List<T> in
+            list.append(element)
+            return list
+        }
+        return converted
+    }
 }
