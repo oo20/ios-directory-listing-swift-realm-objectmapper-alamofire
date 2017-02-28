@@ -28,17 +28,27 @@ class DirectoryCell: UITableViewCell {
     }
     
     func displayData() {
-        assert(individual != nil)
-        guard (individual!.profilePicture != nil) else {
+        guard let tempIndividual = individual else {
+            DLog("Individual needs to be set for directory table cell.")
+            return
+        }
+        
+        guard (tempIndividual.profilePicture != "") else {
             DLog("Individual has no profile picture.")
             return
         }
-        self.personImageView!.image = nil
-        self.personImageView!.isHidden = true
         
-        individual?.preloadImage(finished: { () in
-            self.personImageView!.image = self.individual!.profileImage()
-            self.personImageView!.isHidden = false
+        guard let tempPersonImageView = personImageView else {
+            DLog("Person imageview needs to be connected to directory table cell.")
+            return
+        }
+        
+        tempPersonImageView.image = nil
+        tempPersonImageView.isHidden = true
+        
+        tempIndividual.preloadImage(finished: { () in
+            tempPersonImageView.image = tempIndividual.profileImage()
+            tempPersonImageView.isHidden = false
         })
     }
     

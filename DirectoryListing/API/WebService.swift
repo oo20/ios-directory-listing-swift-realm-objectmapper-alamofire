@@ -17,49 +17,68 @@ class WebService: REST {
         DLog("Directory - Get Individuals - URL: \(directoryURL)")
         
         self.getObject(url:  directoryURL) { (response: Directory?) in
-            let directory: Directory? = response//response.result.value!
             
-            guard (directory != nil) else {
+            guard let directory: Directory = response else {
+                closureIndividuals(List<Individual>())
+                return
+            }
+        
+            let individuals = directory.individuals
+            
+            if (individuals.count <= 0) {
                 closureIndividuals(List<Individual>())
                 return
             }
             
-            let individuals = directory!.individuals
-            
-            guard (individuals != nil) else {
-                closureIndividuals(List<Individual>())
-                return
-            }
-            
-            for individual in individuals! {
+            for individual in individuals {
                 DLog("Individual Found: \(individual.debugText())")
             }
             
-            DLog("Individual Count: \(directory!.individuals!.count)")
+            DLog("Individual Count: \(directory.individuals.count)")
             
-            closureIndividuals(individuals!)
+            closureIndividuals(individuals)
         }
     }
     
     func fetchIndividuals(_ closureIndividuals: @escaping ClosureIndividuals) {
-        let realm = try! Realm()
-        let savedIndividuals = realm.objects(Individual.self)
-        if (savedIndividuals.count > 0) {
-            DLog("Loaded \(savedIndividuals.count) individuals from database.")
-            closureIndividuals(self.convertResultsToList(savedIndividuals))
+        do {
+            let realm = try Realm()
+            
+            let savedIndividuals = realm.objects(Individual.self)
+            
+            if (savedIndividuals.count > 0) {
+                DLog("Loaded \(savedIndividuals.count) individuals from database.")
+                closureIndividuals(self.convertResultsToList(savedIndividuals))
+                
+                return
+            }
+            
+            getIndividuals { individuals in
+                do {
+                    try realm.write {
+                        for individual in individuals {
+                            realm.add(individual, update: true)
+                        }
+                    }
+                } catch let error {
+                    DLog("Realm write individuals error \(error)")
+                    closureIndividuals(List<Individual>())
+                    return
+                }
+                
+                let savedIndividuals = realm.objects(Individual.self)
+                
+                DLog("Written \(savedIndividuals.count) individuals from internet to database.")
+                closureIndividuals(self.convertResultsToList(savedIndividuals))
+            }
+            
+        } catch let error {
+            DLog("Realm open individuals error \(error)")
+            closureIndividuals(List<Individual>())
             return
         }
         
-        getIndividuals { individuals in
-            try! realm.write {
-                for individual in individuals {
-                    realm.add(individual, update: true)
-                }
-            }
-            let savedIndividuals = realm.objects(Individual.self)
-            DLog("Written \(savedIndividuals.count) individuals from internet to database.")
-            closureIndividuals(self.convertResultsToList(savedIndividuals))
-        }
+
         
         
     }

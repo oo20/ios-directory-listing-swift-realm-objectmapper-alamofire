@@ -23,23 +23,22 @@ class REST: NSObject {
                 
         Alamofire.request(urlObject).responseObject { (response: DataResponse<T>) in
             
-            let object: T? = response.result.value
-            
-            guard (object != nil) else {
+            guard let object: T = response.result.value else {
                 closureObject(nil)
                 return
             }
             
             closureObject(object)
-            
         }
     }
     
     func convertResultsToList<T:Mappable>(_ results: Results<T>) -> List<T> {
+        
         let converted = results.reduce(List<T>()) { (list, element) -> List<T> in
             list.append(element)
             return list
         }
+        
         return converted
     }
 }
