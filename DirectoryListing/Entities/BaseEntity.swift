@@ -37,6 +37,13 @@ class BaseEntity: Object, Mappable {
     
     func mapping(map: Map) {
     }
+    
+    func convertDataToUIImage(_ data: Data?) -> UIImage? {
+        guard let realImageData = data else {
+            return nil
+        }
+        return UIImage(data: realImageData)
+    }
 
     func getImage(url: String, closureImageFinished: @escaping ClosureImageFinished) {
         let imageCache = AppManager.shared().imageCache
@@ -53,7 +60,6 @@ class BaseEntity: Object, Mappable {
                 DLog("image downloaded: \(url)")
                 imageCache.add(tempImage, withIdentifier: url)
                 closureImageFinished(tempImage)
-                return
             };
             
             return

@@ -49,11 +49,11 @@ class AppManager: NSObject {
         defaults.set(getAppVersion(), forKey: "AppVersion")
     }
     
-    func getLastAppVersion() -> String {
+    func getLastAppVersion() -> String? {
         let defaults = UserDefaults.standard
         
         guard let version = defaults.string(forKey: "AppVersion") else {
-            return ""
+            return nil
         }
         
         return version
@@ -75,7 +75,10 @@ class AppManager: NSObject {
     func clearRealmIfNeeded() {
         if (getAppVersion() != getLastAppVersion()) {
             
-            let realmURL = Realm.Configuration.defaultConfiguration.fileURL!
+            guard let realmURL = Realm.Configuration.defaultConfiguration.fileURL else {
+                return
+            }
+            
             let realmURLs = [
                 realmURL,
                 realmURL.appendingPathExtension("lock"),

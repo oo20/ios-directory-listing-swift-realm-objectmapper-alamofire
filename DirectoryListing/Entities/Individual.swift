@@ -25,7 +25,7 @@ class Individual: BaseEntity {
     
     var id : String { // Needed for primary key
         get {
-            return "\(lastName)-\(firstName)-\(birthdate)!"
+            return "\(lastName)-\(firstName)-\(birthdate)"
         }
         set {
             // Do nothing
@@ -47,12 +47,8 @@ class Individual: BaseEntity {
         affiliation <- map["affiliation"]
     }
     
-    func friendlyBirthdate() -> String {
-        guard let tempDate = self.birthdate.friendlyDate() else {
-            return ""
-        }
-        
-        return tempDate
+    func friendlyBirthdate() -> String? {
+        return self.birthdate.friendlyDate()
     }
     
     func friendlyAffiliation() -> String {
@@ -69,11 +65,10 @@ class Individual: BaseEntity {
     
     func preloadImage(finished: @escaping ClosureFinished) {
         
-        guard realmLoadedProfileImageData == nil else {
-
+        if (realmLoadedProfileImageData != nil) {
             DLog("loaded image file from database with key: \(self.id)")
             
-            self.loadedProfileImage = UIImage(data: self.realmLoadedProfileImageData!)
+            self.loadedProfileImage = self.convertDataToUIImage(realmLoadedProfileImageData)
             
             finished()
             

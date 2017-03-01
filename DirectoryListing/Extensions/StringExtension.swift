@@ -21,11 +21,7 @@ extension String {
     }
     
     func friendlyDate() -> String? {
-        guard let date = self.date() else {
-            return error()
-        }
-        
-        return date.friendlyDate()
+        return date()?.friendlyDate()
     }
     
     func base64Encoded() -> String? {

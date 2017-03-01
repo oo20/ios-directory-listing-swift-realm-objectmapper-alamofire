@@ -27,19 +27,14 @@ class IndividualDetailController: UIViewController {
             return
         }
         
-        guard let tempFullNameLabel = fullNameLabel, let tempBirthDateLabel = birthDateLabel, let tempAffiliationLabel = affiliationLabel else {
-            DLog("All IBOutlets must be set for the individual detail controller.")
-            return
-        }
-        
-        tempFullNameLabel.text = "Name: \(tempIndividual.firstName) \(tempIndividual.lastName)"
-        tempBirthDateLabel.text = "Born: " + tempIndividual.friendlyBirthdate()
-        tempAffiliationLabel.text = "Affiliation: " + tempIndividual.friendlyAffiliation()
+        fullNameLabel?.text = "Name: \(tempIndividual.firstName) \(tempIndividual.lastName)"
+        birthDateLabel?.text = "Born: " + (tempIndividual.friendlyBirthdate() ?? "Unknown")
+        affiliationLabel?.text = "Affiliation: " + tempIndividual.friendlyAffiliation()
 
-        personImageView!.image = nil
+        personImageView?.image = nil
         
-        individual!.preloadImage { () in
-            self.personImageView!.image = self.individual!.profileDetailImage()
+        tempIndividual.preloadImage { () in
+            self.personImageView!.image = tempIndividual.profileDetailImage()
         }
     }
 
