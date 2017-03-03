@@ -17,7 +17,6 @@ class AppManager: NSObject {
     
     public var webService: WebService
     public var imageCache = AutoPurgingImageCache()
-
     
     override init() {
         self.webService = WebService()

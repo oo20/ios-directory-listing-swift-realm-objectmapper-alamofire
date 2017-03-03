@@ -16,6 +16,7 @@ class IndividualDetailController: UIViewController {
     @IBOutlet var affiliationLabel: UILabel?
     
     var individual : Individual?
+    var individualIndex : Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,14 +28,21 @@ class IndividualDetailController: UIViewController {
             return
         }
         
+        guard self.individualIndex != -1 else {
+            DLog("Individual index must be set for individual detail controller.")
+            return
+        }
+        
         fullNameLabel?.text = "Name: \(tempIndividual.firstName) \(tempIndividual.lastName)"
         birthDateLabel?.text = "Born: " + (tempIndividual.friendlyBirthdate() ?? "Unknown")
         affiliationLabel?.text = "Affiliation: " + tempIndividual.friendlyAffiliation()
 
         personImageView?.image = nil
         
-        tempIndividual.preloadImage { () in
-            self.personImageView!.image = tempIndividual.profileDetailImage()
+        tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
+            if (self.individualIndex == returnedIndex) {
+                self.personImageView!.image = tempIndividual.profileDetailImage()
+            }
         }
     }
 

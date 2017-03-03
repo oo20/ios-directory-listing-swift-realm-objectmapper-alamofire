@@ -14,6 +14,7 @@ import Realm
 import RealmSwift
 
 typealias ClosureImageFinished = (UIImage?) -> ()
+typealias ClosureIndexFinished = (Int) -> ()
 typealias ClosureFinished = () -> ()
 
 

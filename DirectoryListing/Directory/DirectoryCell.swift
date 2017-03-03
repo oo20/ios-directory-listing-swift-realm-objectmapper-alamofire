@@ -13,8 +13,10 @@ import AlamofireImage
 class DirectoryCell: UITableViewCell {
     
     @IBOutlet var personImageView: UIImageView?
+    @IBOutlet var activityIndicator: UIActivityIndicatorView?
     
     var individual : Individual?
+    var individualIndex : Int = -1
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,6 +35,11 @@ class DirectoryCell: UITableViewCell {
             return
         }
         
+        guard self.individualIndex != -1 else {
+            DLog("Individual index must be set for directory table cell.")
+            return
+        }
+        
         guard (tempIndividual.profilePicture != "") else {
             DLog("Individual has no profile picture.")
             return
@@ -45,11 +52,15 @@ class DirectoryCell: UITableViewCell {
         
         tempPersonImageView.image = nil
         tempPersonImageView.isHidden = true
+        activityIndicator?.startAnimating()
         
-        tempIndividual.preloadImage(finished: { () in
-            tempPersonImageView.image = tempIndividual.profileImage()
-            tempPersonImageView.isHidden = false
-        })
+        tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
+            if (self.individualIndex == returnedIndex) {
+                tempPersonImageView.image = tempIndividual.profileImage()
+                tempPersonImageView.isHidden = false
+                self.activityIndicator?.stopAnimating()
+            }
+        }
     }
     
 }

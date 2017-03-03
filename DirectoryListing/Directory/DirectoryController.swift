@@ -13,7 +13,8 @@ class DirectoryController: UITableViewController {
     
     var individuals : List<Individual> = List<Individual> ()
     var selectedIndividual : Individual? = nil
-
+    var selectedIndividualIndex : Int = -1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -61,6 +62,8 @@ class DirectoryController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath)
 
         let directoryCell = cell as! DirectoryCell
+        directoryCell.selectionStyle = .none
+        directoryCell.individualIndex = indexPath.row
         directoryCell.individual = individuals[indexPath.row]
         directoryCell.displayData()
         
@@ -68,6 +71,7 @@ class DirectoryController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        selectedIndividualIndex = indexPath.row
         selectedIndividual = individuals[indexPath.row]
         return indexPath
     }
@@ -121,7 +125,9 @@ class DirectoryController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "IndividualDetailSegue") {
             assert(selectedIndividual != nil)
+            assert(selectedIndividualIndex != -1)
             let destination = segue.destination as! IndividualDetailController
+            destination.individualIndex = selectedIndividualIndex
             destination.individual = selectedIndividual
         }
     }
