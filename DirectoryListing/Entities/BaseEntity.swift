@@ -37,26 +37,34 @@ class BaseEntity: Object, Mappable {
     
     func mapping(map: Map) {
     }
+    
+    func convertDataToUIImage(_ data: Data?) -> UIImage? {
+        guard let realImageData = data else {
+            return nil
+        }
+        return UIImage(data: realImageData)
+    }
 
     func getImage(url: String, closureImageFinished: @escaping ClosureImageFinished) {
         let imageCache = AppManager.shared().imageCache
-        let cachedImage = imageCache.image(withIdentifier: url)
-        
-        if (cachedImage != nil) {
-            closureImageFinished(cachedImage!)
+
+        guard let cachedImage = imageCache.image(withIdentifier: url) else {
+            
+            Alamofire.request(url).responseImage { response in
+                guard let tempImage = response.result.value else {
+                    DLog("image failed to downloaded: \(url)")
+                    closureImageFinished(nil)
+                    return
+                }
+
+                DLog("image downloaded: \(url)")
+                imageCache.add(tempImage, withIdentifier: url)
+                closureImageFinished(tempImage)
+            };
+            
             return
         }
-        
-        Alamofire.request(url).responseImage { response in
-            let tempImage = response.result.value
-            if tempImage != nil {
-                DLog("image downloaded: \(url)")
-                imageCache.add(tempImage!, withIdentifier: url)
-                closureImageFinished(tempImage!)
-                return
-            }
-            DLog("image failed to downloaded: \(url)")
-            closureImageFinished(nil)
-        };
+
+        closureImageFinished(cachedImage)
     }
 }

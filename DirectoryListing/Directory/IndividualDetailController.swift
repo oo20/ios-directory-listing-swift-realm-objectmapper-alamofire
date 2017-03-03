@@ -22,16 +22,19 @@ class IndividualDetailController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        assert(individual != nil)
+        guard let tempIndividual = individual else {
+            DLog("Individual must be set for individual detail controller.")
+            return
+        }
         
-        fullNameLabel!.text = "Name: \(individual!.firstName!) \(individual!.lastName!)"
-        birthDateLabel!.text = "Born: " + individual!.friendlyBirthdate()!
-        affiliationLabel!.text = "Affiliation: " + individual!.friendlyAffiliation()!
+        fullNameLabel?.text = "Name: \(tempIndividual.firstName) \(tempIndividual.lastName)"
+        birthDateLabel?.text = "Born: " + (tempIndividual.friendlyBirthdate() ?? "Unknown")
+        affiliationLabel?.text = "Affiliation: " + tempIndividual.friendlyAffiliation()
 
-        personImageView!.image = nil
+        personImageView?.image = nil
         
-        individual!.preloadImage { () in
-            self.personImageView!.image = self.individual!.profileDetailImage()
+        tempIndividual.preloadImage { () in
+            self.personImageView!.image = tempIndividual.profileDetailImage()
         }
     }
 

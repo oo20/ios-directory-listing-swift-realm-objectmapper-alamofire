@@ -13,11 +13,11 @@ import Realm
 import RealmSwift
 
 class Individual: BaseEntity {
-    dynamic var firstName: String? = ""
-    dynamic var lastName: String? = ""
-    dynamic var birthdate: String? = ""
-    dynamic var profilePicture: String? = ""
-    dynamic var affiliation: String? = ""
+    dynamic var firstName: String = ""
+    dynamic var lastName: String = ""
+    dynamic var birthdate: String = ""
+    dynamic var profilePicture: String = ""
+    dynamic var affiliation: String = ""
     var forceSensitive = RealmOptional<Bool>()
     
     dynamic var realmLoadedProfileImageData: Data? = nil
@@ -25,7 +25,7 @@ class Individual: BaseEntity {
     
     var id : String { // Needed for primary key
         get {
-            return "\(lastName!)-\(firstName!)-\(birthdate!)!"
+            return "\(lastName)-\(firstName)-\(birthdate)"
         }
         set {
             // Do nothing
@@ -48,59 +48,76 @@ class Individual: BaseEntity {
     }
     
     func friendlyBirthdate() -> String? {
-        return self.birthdate?.friendlyDate()
+        return self.birthdate.friendlyDate()
     }
     
-    func friendlyAffiliation() -> String? {
-        return affiliation?.replacingOccurrences(of: "_", with: " ").lowercased().localizedCapitalized
+    func friendlyAffiliation() -> String {
+        return affiliation.replacingOccurrences(of: "_", with: " ").lowercased().localizedCapitalized
     }
     
     func debugText() -> String {
-        assert(self.firstName != nil)
-        assert(self.lastName != nil)
-        assert(self.birthdate != nil)
-        assert(self.profilePicture != nil)
-        assert(self.affiliation != nil)
-
-        return "\(self.firstName!) \(self.lastName!) \(self.birthdate!) \(self.profilePicture!) \(self.forceSensitive) \(self.affiliation!)"
+        return "\(self.firstName) \(self.lastName) \(self.birthdate) \(self.profilePicture) \(self.forceSensitive) \(self.affiliation)"
+    }
+    
+    func clearImage() {
+        self.realmLoadedProfileImageData = nil
     }
     
     func preloadImage(finished: @escaping ClosureFinished) {
-        if (self.realmLoadedProfileImageData != nil) {
+        
+        if (realmLoadedProfileImageData != nil) {
             DLog("loaded image file from database with key: \(self.id)")
-            self.loadedProfileImage = UIImage(data: self.realmLoadedProfileImageData!)
+            
+            self.loadedProfileImage = self.convertDataToUIImage(realmLoadedProfileImageData)
+            
             finished()
+            
             return
         }
-        self.getImage(url: profilePicture!) { (image) in
+        
+        self.getImage(url: profilePicture) { (image) in
             self.loadedProfileImage = image
-            let realm = try! Realm()
-            try! realm.write {
-                if (image != nil) {
-                    self.realmLoadedProfileImageData = UIImagePNGRepresentation(image!)
-                } else {
-                    self.realmLoadedProfileImageData = nil
-                }
+            
+            guard let returnImage = image else {
+                self.clearImage()
+                return
             }
+            
+            do {
+                let realm = try Realm()
+                
+                try realm.write {
+                    self.realmLoadedProfileImageData = UIImagePNGRepresentation(returnImage)
+                }
+                
+            } catch let error {
+                DLog("Realm write profile image error \(error)")
+                return
+            }
+            
+            
             finished()
         }
+        return
+
     }
     
     func profileImage() -> UIImage?
     {
-        guard (loadedProfileImage != nil) else { return nil }
+        guard let tempImage = loadedProfileImage else { return nil }
         
         let size = CGSize(width: 100.0, height: 100.0)
         let imageFilter = AspectScaledToFillSizeCircleFilter(size: size)
-        return imageFilter.filter(loadedProfileImage!)
+        
+        return imageFilter.filter(tempImage)
     }
     
     func profileDetailImage() -> UIImage?
     {
-        guard (loadedProfileImage != nil) else { return nil }
+        guard let tempImage = loadedProfileImage else { return nil }
         
         let imageFilter = RoundedCornersFilter(radius: 10)
         
-        return imageFilter.filter(loadedProfileImage!)
+        return imageFilter.filter(tempImage)
     }
 }

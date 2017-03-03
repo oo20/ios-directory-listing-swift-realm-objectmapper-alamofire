@@ -12,7 +12,7 @@ import RealmSwift
 import ObjectMapper_Realm
 
 class Directory: BaseEntity {
-    var individuals : List<Individual>? = List<Individual>()
+    var individuals : List<Individual> = List<Individual>()
     
     override func mapping(map: Map) {
         super.mapping(map: map)
