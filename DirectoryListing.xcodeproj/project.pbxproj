@@ -14,6 +14,7 @@
 		11205ECD1E5CF32300FD7D1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11205ECB1E5CF32300FD7D1D /* LaunchScreen.storyboard */; };
 		1142628E1E5E294F007815EA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1142628D1E5E294F007815EA /* WebService.swift */; };
 		114262911E5E5016007815EA /* LogCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114262901E5E5016007815EA /* LogCleanup.swift */; };
+		11CAEAA01E70996300CBCCCD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 11CAEA9F1E70996300CBCCCD /* README.md */; };
 		11D0C3631E5CFEDE00C1C0CE /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */; };
 		11D0C3671E5D001600C1C0CE /* Directory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D0C3641E5D001600C1C0CE /* Directory.storyboard */; };
 		11D0C3681E5D001600C1C0CE /* DirectoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3651E5D001600C1C0CE /* DirectoryCell.swift */; };
@@ -39,6 +40,7 @@
 		11205ECE1E5CF32400FD7D1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1142628D1E5E294F007815EA /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = API/WebService.swift; sourceTree = "<group>"; };
 		114262901E5E5016007815EA /* LogCleanup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogCleanup.swift; path = Alias/LogCleanup.swift; sourceTree = "<group>"; };
+		11CAEA9F1E70996300CBCCCD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppManager.swift; path = Shared/AppManager.swift; sourceTree = "<group>"; };
 		11D0C3641E5D001600C1C0CE /* Directory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Directory.storyboard; path = Directory/Directory.storyboard; sourceTree = "<group>"; };
 		11D0C3651E5D001600C1C0CE /* DirectoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DirectoryCell.swift; path = Directory/DirectoryCell.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			children = (
 				11205EC91E5CF32300FD7D1D /* Assets.xcassets */,
 				11205ECE1E5CF32400FD7D1D /* Info.plist */,
+				11CAEA9F1E70996300CBCCCD /* README.md */,
 				11205ECB1E5CF32300FD7D1D /* LaunchScreen.storyboard */,
 				11205EC21E5CF32300FD7D1D /* AppDelegate.swift */,
 				11205EC41E5CF32300FD7D1D /* ViewController.swift */,
@@ -150,8 +153,8 @@
 		11D0C3701E5D08D000C1C0CE /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				11D0C36E1E5D089300C1C0CE /* BaseEntity.swift */,
 				11D0C3711E5D090D00C1C0CE /* Individual.swift */,
+				11D0C36E1E5D089300C1C0CE /* BaseEntity.swift */,
 				11D0C3731E5D0DA100C1C0CE /* Directory.swift */,
 			);
 			name = Entities;
@@ -320,6 +323,7 @@
 				11205EC51E5CF32300FD7D1D /* ViewController.swift in Sources */,
 				1142628E1E5E294F007815EA /* WebService.swift in Sources */,
 				11205EC31E5CF32300FD7D1D /* AppDelegate.swift in Sources */,
+				11CAEAA01E70996300CBCCCD /* README.md in Sources */,
 				11D0C3791E5D34D000C1C0CE /* StringExtension.swift in Sources */,
 				11D0C3741E5D0DA100C1C0CE /* Directory.swift in Sources */,
 			);

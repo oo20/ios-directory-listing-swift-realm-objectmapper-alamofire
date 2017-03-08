@@ -8,9 +8,9 @@
 
 import UIKit
 import ObjectMapper
-import AlamofireImage
 import Realm
 import RealmSwift
+import AlamofireImage
 
 class Individual: BaseEntity {
     dynamic var firstName: String = ""
@@ -20,13 +20,10 @@ class Individual: BaseEntity {
     dynamic var affiliation: String = ""
     var forceSensitive = RealmOptional<Bool>()
     
-    dynamic var realmLoadedProfileImageData: Data? = nil
     private var loadedProfileImage: UIImage?
-    
-    dynamic var realmLoadedProfileThumbnailImageData: Data? = nil
     private var loadedProfileThumbnailImage: UIImage?
     
-    private var loading : Bool = false
+    private var requestedLoad : Bool = false
     
     var id : String { // Needed for primary key
         get {
@@ -65,8 +62,9 @@ class Individual: BaseEntity {
     }
     
     func clearImage() {
-        self.realmLoadedProfileImageData = nil
-        self.realmLoadedProfileThumbnailImageData = nil
+        self.loadedProfileImage = nil
+        self.loadedProfileThumbnailImage = nil
+        self.requestedLoad = false
     }
     
     func preloadImage(checkIndex: Int, finished: @escaping ClosureIndexFinished) {
@@ -78,50 +76,31 @@ class Individual: BaseEntity {
             return
         }
         
-        if (realmLoadedProfileImageData != nil && realmLoadedProfileThumbnailImageData != nil) {
-            DLog("loaded images file from database with key: \(self.id)")
-            
-            self.loadedProfileImage = self.convertDataToUIImage(realmLoadedProfileImageData)
-            self.loadedProfileThumbnailImage = self.convertDataToUIImage(realmLoadedProfileThumbnailImageData)
-            
-            finished(checkIndex)
+        if (self.requestedLoad == true) {
             return
         }
         
-        if (self.loading == true) {
-            return
-        }
-        
-        self.loading = true
-        
+        self.requestedLoad = true
+
         self.getImage(url: profilePicture) { (image) in
+        
             self.loadedProfileImage = image
+            
+            self.loadedProfileImage = self.profileDetailImage()
             
             self.loadedProfileThumbnailImage = self.profileImage()
             
-            guard let returnImage = image, let returnThumbnailImage = self.loadedProfileThumbnailImage else {
+            if (image == nil || self.loadedProfileImage == nil || self.loadedProfileThumbnailImage == nil) {
                 self.clearImage()
                 return
             }
             
-            finished(checkIndex)
-            
-            do {
-                let realm = try Realm()
-                
-                try realm.write {
-                    self.realmLoadedProfileImageData = UIImagePNGRepresentation(returnImage)
-                    self.realmLoadedProfileThumbnailImageData = UIImagePNGRepresentation(returnThumbnailImage)
-                }
-                
-            } catch let error {
-                DLog("Realm write profile image error \(error)")
-                return
+            DispatchQueue.main.async {
+                finished(checkIndex)
             }
-            
         }
+        
         return
-
     }
     
     func profileImage() -> UIImage?
@@ -146,7 +125,8 @@ class Individual: BaseEntity {
         
         guard let tempImage = loadedProfileImage else { return nil }
         
-        let imageFilter = RoundedCornersFilter(radius: 10)
+        let size = CGSize(width: 200.0, height: 200.0)
+        let imageFilter = AspectScaledToFitSizeFilter(size: size)
         
         return imageFilter.filter(tempImage)
     }
