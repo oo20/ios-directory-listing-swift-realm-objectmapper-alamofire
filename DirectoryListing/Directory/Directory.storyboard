@@ -46,6 +46,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="activityIndicator" destination="aj2-hM-tg3" id="r8e-Vd-fNE"/>
                                     <outlet property="personImageView" destination="daT-Vc-p0l" id="9fM-dZ-TSb"/>
                                     <segue destination="Mwv-wQ-JpT" kind="show" identifier="IndividualDetailSegue" id="zlG-l3-rT1"/>
                                 </connections>

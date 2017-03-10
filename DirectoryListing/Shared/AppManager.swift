@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import AlamofireImage
 import RealmSwift
+import STXImageCache
 
 class AppManager: NSObject {
     static private var appManager: AppManager? = nil
@@ -16,8 +16,6 @@ class AppManager: NSObject {
     static public let baseURL = AppManager.decodeURL("YUhSMGNITTZMeTlsWkdkbExteGtjMk5rYmk1dmNtY3ZiVzlpYVd4bEwybHVkR1Z5ZG1sbGR5OD0=")
     
     public var webService: WebService
-    public var imageCache = AutoPurgingImageCache()
-
     
     override init() {
         self.webService = WebService()
@@ -26,10 +24,25 @@ class AppManager: NSObject {
     static func shared() -> AppManager {
         if (AppManager.appManager == nil) {
             AppManager.appManager = AppManager()
-            AppManager.appManager?.clearRealmIfNeeded()
+            AppManager.appManager?.clearDataIfNeeded()
+            
+            AppManager.appManager?.initImageCache()
         }
         
         return AppManager.appManager!
+    }
+    
+    func initImageCache() {
+        var diskConfig = STXDiskCacheConfig()
+        diskConfig.enabled = true
+        diskConfig.cacheExpirationTime = 7 // in days, 0 = never (dependent on iOS)
+        STXCacheManager.shared.diskCacheConfig = diskConfig
+        
+        var memoryConfig = STXMemoryCacheConfig()
+        
+        memoryConfig.enabled = true
+        memoryConfig.maximumMemoryCacheSize = 0 // in megabytes, 0 = unlimited
+        STXCacheManager.shared.memoryCacheConfig = memoryConfig
     }
     
     static func decodeURL(_ text: String) -> String {
@@ -72,12 +85,14 @@ class AppManager: NSObject {
     }
     
     
-    func clearRealmIfNeeded() {
+    func clearDataIfNeeded() {
         if (getAppVersion() != getLastAppVersion()) {
             
             guard let realmURL = Realm.Configuration.defaultConfiguration.fileURL else {
                 return
             }
+            
+            STXCacheManager.shared.clearCache()
             
             let realmURLs = [
                 realmURL,

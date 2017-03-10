@@ -9,11 +9,12 @@
 import UIKit
 import ObjectMapper
 import Alamofire
-import AlamofireImage
 import Realm
 import RealmSwift
+import STXImageCache
 
 typealias ClosureImageFinished = (UIImage?) -> ()
+typealias ClosureIndexFinished = (Int) -> ()
 typealias ClosureFinished = () -> ()
 
 
@@ -44,27 +45,21 @@ class BaseEntity: Object, Mappable {
         }
         return UIImage(data: realImageData)
     }
-
+    
     func getImage(url: String, closureImageFinished: @escaping ClosureImageFinished) {
-        let imageCache = AppManager.shared().imageCache
-
-        guard let cachedImage = imageCache.image(withIdentifier: url) else {
-            
-            Alamofire.request(url).responseImage { response in
-                guard let tempImage = response.result.value else {
-                    DLog("image failed to downloaded: \(url)")
-                    closureImageFinished(nil)
-                    return
-                }
-
-                DLog("image downloaded: \(url)")
-                imageCache.add(tempImage, withIdentifier: url)
-                closureImageFinished(tempImage)
-            };
-            
+        guard let requestURL = URL(string: url) else {
             return
         }
-
-        closureImageFinished(cachedImage)
+        
+        STXCacheManager.shared.image(atURL: requestURL, forceRefresh: false, progress: { (percentage) in
+            
+        }) { (imageData, error) in
+            guard let image = self.convertDataToUIImage(imageData) else {
+                return
+            }
+            DLog("fetch new or cached image: \(url)")
+            closureImageFinished(image)
+        }
+        
     }
 }

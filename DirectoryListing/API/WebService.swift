@@ -42,9 +42,9 @@ class WebService: REST {
     
     func fetchIndividuals(_ closureIndividuals: @escaping ClosureIndividuals) {
         do {
-            let realm = try Realm()
+            let realmRead = try Realm()
             
-            let savedIndividuals = realm.objects(Individual.self)
+            let savedIndividuals = realmRead.objects(Individual.self)
             
             if (savedIndividuals.count > 0) {
                 DLog("Loaded \(savedIndividuals.count) individuals from database.")
@@ -53,23 +53,28 @@ class WebService: REST {
                 return
             }
             
+            realmRead.invalidate()
+            
             getIndividuals { individuals in
+                
+                DLog("Written \(individuals.count) individuals from internet to database.")
+                closureIndividuals(individuals)
+                
                 do {
-                    try realm.write {
-                        for individual in individuals {
-                            realm.add(individual, update: true)
-                        }
+                    let realm = try Realm()
+
+                    realm.beginWrite()
+                    
+                    for individual in individuals {
+                        realm.add(individual, update: true)
                     }
+                    
+                    try realm.commitWrite()
+                    
                 } catch let error {
                     DLog("Realm write individuals error \(error)")
-                    closureIndividuals(List<Individual>())
                     return
                 }
-                
-                let savedIndividuals = realm.objects(Individual.self)
-                
-                DLog("Written \(savedIndividuals.count) individuals from internet to database.")
-                closureIndividuals(self.convertResultsToList(savedIndividuals))
             }
             
         } catch let error {
