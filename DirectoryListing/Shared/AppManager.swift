@@ -13,6 +13,7 @@ import STXImageCache
 class AppManager: NSObject {
     static private var appManager: AppManager? = nil
 
+    //static public let baseURL = "http://localhost:8080/api/individuals/"
     static public let baseURL = AppManager.decodeURL("YUhSMGNITTZMeTlsWkdkbExteGtjMk5rYmk1dmNtY3ZiVzlpYVd4bEwybHVkR1Z5ZG1sbGR5OD0=")
     
     public var webService: WebService
@@ -47,11 +48,11 @@ class AppManager: NSObject {
     
     static func decodeURL(_ text: String) -> String {
         guard let decodedURL = text.base64Decoded() else {
-            return ""
+            return baseURL
         }
         
         guard let url = decodedURL.base64Decoded() else {
-            return ""
+            return decodedURL
         }
         
         return url
