@@ -8,8 +8,9 @@
 
 import UIKit
 import Alamofire
+import SwipeCellKit
 
-class DirectoryCell: UITableViewCell {
+class DirectoryCell: SwipeTableViewCell {
     
     @IBOutlet var personImageView: UIImageView?
     @IBOutlet var activityIndicator: UIActivityIndicatorView?
@@ -39,11 +40,6 @@ class DirectoryCell: UITableViewCell {
             return
         }
         
-        guard (tempIndividual.profilePicture != "") else {
-            DLog("Individual has no profile picture.")
-            return
-        }
-        
         guard let tempPersonImageView = personImageView else {
             DLog("Person imageview needs to be connected to directory table cell.")
             return
@@ -51,7 +47,10 @@ class DirectoryCell: UITableViewCell {
         
         tempPersonImageView.image = nil
         tempPersonImageView.isHidden = true
-        activityIndicator?.startAnimating()
+        
+        if (tempIndividual.profilePicture != "") {
+            activityIndicator?.startAnimating()
+        }
         
         tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
             if (self.individualIndex == returnedIndex) {

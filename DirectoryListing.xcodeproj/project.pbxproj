@@ -14,6 +14,7 @@
 		11205ECD1E5CF32300FD7D1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11205ECB1E5CF32300FD7D1D /* LaunchScreen.storyboard */; };
 		1142628E1E5E294F007815EA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1142628D1E5E294F007815EA /* WebService.swift */; };
 		114262911E5E5016007815EA /* LogCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114262901E5E5016007815EA /* LogCleanup.swift */; };
+		1151F9411ECB7846001A58C2 /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */; };
 		11CAEAA01E70996300CBCCCD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 11CAEA9F1E70996300CBCCCD /* README.md */; };
 		11D0C3631E5CFEDE00C1C0CE /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */; };
 		11D0C3671E5D001600C1C0CE /* Directory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D0C3641E5D001600C1C0CE /* Directory.storyboard */; };
@@ -26,6 +27,7 @@
 		11D0C3761E5D2DB500C1C0CE /* IndividualDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3751E5D2DB500C1C0CE /* IndividualDetailController.swift */; };
 		11D0C3791E5D34D000C1C0CE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3781E5D34D000C1C0CE /* StringExtension.swift */; };
 		11D0C37B1E5D35DC00C1C0CE /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C37A1E5D35DC00C1C0CE /* DateExtension.swift */; };
+		11EEF28A1ECA6949000AC0A5 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EEF2891ECA6949000AC0A5 /* ImageExtension.swift */; };
 		9320B84F76B2130857705750 /* Pods_DirectoryListing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54999998BC5EDE922E7D68A4 /* Pods_DirectoryListing.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,7 @@
 		11205ECE1E5CF32400FD7D1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1142628D1E5E294F007815EA /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = API/WebService.swift; sourceTree = "<group>"; };
 		114262901E5E5016007815EA /* LogCleanup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogCleanup.swift; path = Alias/LogCleanup.swift; sourceTree = "<group>"; };
+		1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITextFieldExtension.swift; path = Extensions/UITextFieldExtension.swift; sourceTree = "<group>"; };
 		11CAEA9F1E70996300CBCCCD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppManager.swift; path = Shared/AppManager.swift; sourceTree = "<group>"; };
 		11D0C3641E5D001600C1C0CE /* Directory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Directory.storyboard; path = Directory/Directory.storyboard; sourceTree = "<group>"; };
@@ -52,6 +55,7 @@
 		11D0C3751E5D2DB500C1C0CE /* IndividualDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndividualDetailController.swift; path = Directory/IndividualDetailController.swift; sourceTree = "<group>"; };
 		11D0C3781E5D34D000C1C0CE /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Extensions/StringExtension.swift; sourceTree = "<group>"; };
 		11D0C37A1E5D35DC00C1C0CE /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = Extensions/DateExtension.swift; sourceTree = "<group>"; };
+		11EEF2891ECA6949000AC0A5 /* ImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageExtension.swift; path = Extensions/ImageExtension.swift; sourceTree = "<group>"; };
 		54999998BC5EDE922E7D68A4 /* Pods_DirectoryListing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DirectoryListing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8200C559FF6EE6E961DB605 /* Pods-DirectoryListing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DirectoryListing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DirectoryListing/Pods-DirectoryListing.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +169,8 @@
 			children = (
 				11D0C3781E5D34D000C1C0CE /* StringExtension.swift */,
 				11D0C37A1E5D35DC00C1C0CE /* DateExtension.swift */,
+				11EEF2891ECA6949000AC0A5 /* ImageExtension.swift */,
+				1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -316,6 +322,7 @@
 				11D0C36D1E5D04FB00C1C0CE /* REST.swift in Sources */,
 				114262911E5E5016007815EA /* LogCleanup.swift in Sources */,
 				11D0C3761E5D2DB500C1C0CE /* IndividualDetailController.swift in Sources */,
+				1151F9411ECB7846001A58C2 /* UITextFieldExtension.swift in Sources */,
 				11D0C36F1E5D089300C1C0CE /* BaseEntity.swift in Sources */,
 				11D0C3681E5D001600C1C0CE /* DirectoryCell.swift in Sources */,
 				11D0C3721E5D090D00C1C0CE /* Individual.swift in Sources */,
@@ -326,6 +333,7 @@
 				11CAEAA01E70996300CBCCCD /* README.md in Sources */,
 				11D0C3791E5D34D000C1C0CE /* StringExtension.swift in Sources */,
 				11D0C3741E5D0DA100C1C0CE /* Directory.swift in Sources */,
+				11EEF28A1ECA6949000AC0A5 /* ImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

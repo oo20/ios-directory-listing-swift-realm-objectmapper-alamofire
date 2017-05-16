@@ -48,6 +48,7 @@ class BaseEntity: Object, Mappable {
     
     func getImage(url: String, closureImageFinished: @escaping ClosureImageFinished) {
         guard let requestURL = URL(string: url) else {
+            closureImageFinished(UIImage(named: "Missing"))
             return
         }
         

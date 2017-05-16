@@ -8,8 +8,13 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
-class DirectoryController: UITableViewController {
+protocol DirectoryControllerDelegate {
+    func getIndividuals();
+}
+
+class DirectoryController: UITableViewController , SwipeTableViewCellDelegate, DirectoryControllerDelegate {
     
     var individuals : List<Individual> = List<Individual> ()
     var selectedIndividual : Individual? = nil
@@ -27,13 +32,11 @@ class DirectoryController: UITableViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        AppManager.shared().webService.fetchIndividuals { (individuals) in
-            self.individuals = individuals
-            self.reloadData()
-        }
+        getIndividuals()
     }
 
     override func didReceiveMemoryWarning() {
+
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -57,11 +60,17 @@ class DirectoryController: UITableViewController {
     func reloadData() {
         tableView.reloadData()
     }
+    
+    @IBAction func refresh(_ sender: Any) {
+        AppManager.shared().clearData()
+        getIndividuals()
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DirectoryCell", for: indexPath)
 
         let directoryCell = cell as! DirectoryCell
+        directoryCell.delegate = self
         directoryCell.selectionStyle = .none
         directoryCell.individualIndex = indexPath.row
         directoryCell.individual = individuals[indexPath.row]
@@ -129,7 +138,51 @@ class DirectoryController: UITableViewController {
             let destination = segue.destination as! IndividualDetailController
             destination.individualIndex = selectedIndividualIndex
             destination.individual = selectedIndividual
+            destination.directoryDelegate = self
         }
+        
+        if (segue.identifier == "CreateIndividualDetailSegue") {
+            selectedIndividual = nil
+            selectedIndividualIndex = -1
+            let destination = segue.destination as! IndividualDetailController
+            destination.individualIndex = -1
+            destination.individual = Individual()
+            destination.directoryDelegate = self
+        }
+    }
+    
+    func getIndividuals() {
+        AppManager.shared().webService.fetchIndividuals { (individuals) in
+            self.individuals = individuals
+            self.reloadData()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+        guard AppManager.shared().authenticated() == true else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+
+            let deleteIndividual = self.individuals[indexPath.row]
+            
+            AppManager.shared().webService.deleteIndividual(deleteIndividual.id, deleteIndividual, { (id) in
+                
+                self.individuals.remove(at: indexPath.row)
+                
+                self.selectedIndividualIndex = -1
+                self.selectedIndividual = nil
+                self.tableView.beginUpdates()
+                self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+                self.tableView.endUpdates()
+            })
+
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage.getSystemImage(UIBarButtonSystemItem.trash)
+
+        return [deleteAction]
     }
 
 }

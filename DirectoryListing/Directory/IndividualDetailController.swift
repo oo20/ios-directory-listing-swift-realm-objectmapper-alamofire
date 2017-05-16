@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 class IndividualDetailController: UIViewController {
     
@@ -15,8 +16,16 @@ class IndividualDetailController: UIViewController {
     @IBOutlet var birthDateLabel: UILabel?
     @IBOutlet var affiliationLabel: UILabel?
     
+    @IBOutlet var fullNameTextField: UITextField?
+    @IBOutlet var birthDateTextField: UITextField?
+    @IBOutlet var affiliationTextField: UITextField?
+    
+    @IBOutlet var saveButton: UIButton?
+    
     var individual : Individual?
     var individualIndex : Int = -1
+    
+    var directoryDelegate : DirectoryControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +37,25 @@ class IndividualDetailController: UIViewController {
             return
         }
         
-        guard self.individualIndex != -1 else {
-            DLog("Individual index must be set for individual detail controller.")
-            return
-        }
+        fullNameTextField?.text = "\(tempIndividual.firstName) \(tempIndividual.lastName)"
         
-        fullNameLabel?.text = "Name: \(tempIndividual.firstName) \(tempIndividual.lastName)"
-        birthDateLabel?.text = "Born: " + (tempIndividual.friendlyBirthdate() ?? "Unknown")
-        affiliationLabel?.text = "Affiliation: " + tempIndividual.friendlyAffiliation()
+        affiliationTextField?.text = tempIndividual.friendlyAffiliation()
+        
+        if (AppManager.shared().authenticated()) {
+            fullNameTextField?.editing(true)
+            birthDateTextField?.editing(true)
+            affiliationTextField?.editing(true)
+            saveButton?.isHidden = false
+            
+            birthDateTextField?.text = tempIndividual.birthdate
+        } else {
+            fullNameTextField?.disabled()
+            birthDateTextField?.disabled()
+            affiliationTextField?.disabled()
+            saveButton?.isHidden = true
+            
+            birthDateTextField?.text = (tempIndividual.friendlyBirthdate() ?? "Unknown")
+        }
 
         personImageView?.image = nil
         
@@ -50,7 +70,6 @@ class IndividualDetailController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
     /*
     // MARK: - Navigation
@@ -61,5 +80,58 @@ class IndividualDetailController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    @IBAction func save(_ sender: Any) {
+        guard let tIndividual = self.individual else {
+            return
+        }
+        
+        guard let tempId = tIndividual.id as String?,
+              let tempProfilePicture = tIndividual.profilePicture as String?,
+              let tempFullName = self.fullNameTextField?.text,
+              let tempBirthDate = self.birthDateTextField?.text,
+              let tempAffiliate = self.affiliationTextField?.text else {
+            return
+        }
+        
+        let tempIndividual = Individual()
+        tempIndividual.firstName = tempFullName
+        tempIndividual.lastName = String("")
+        tempIndividual.birthdate = tempBirthDate
+        tempIndividual.affiliation = tempAffiliate
+        tempIndividual.profilePicture = tempProfilePicture
+        tempIndividual.forceSensitive.value = false
+        
+        if (tempId == "") {
+            AppManager.shared().webService.createIndividual(tempIndividual) { (createdIndividualId, createdIndividual) in
+                
+                guard let createdId = createdIndividualId else {
+                    DLog("Failed to create individual.")
+                    return
+                }
+                
+                DLog("Created individual \(createdId).")
+                self.directoryDelegate?.getIndividuals();
+                self.dismiss()
+            }
+            
+            return
+        }
+        AppManager.shared().webService.modifyIndividual(tempId, tempIndividual) { (modifiedIndividualId, modifiedIndividual) in
+            
+            guard let modifiedId = modifiedIndividualId else {
+                DLog("Failed to modify individual.")
+                return
+            }
+            
+            DLog("Modified individual \(modifiedId).")
+            self.directoryDelegate?.getIndividuals();
+            self.dismiss()
+        }
+    }
+    
+    func dismiss() {
+        self.navigationController?.popViewController(animated: true)
+    }
 
 }

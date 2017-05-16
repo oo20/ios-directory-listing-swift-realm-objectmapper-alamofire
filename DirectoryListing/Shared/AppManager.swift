@@ -13,8 +13,7 @@ import STXImageCache
 class AppManager: NSObject {
     static private var appManager: AppManager? = nil
 
-    //static public let baseURL = "http://localhost:8080/api/individuals/"
-    static public let baseURL = AppManager.decodeURL("YUhSMGNITTZMeTlsWkdkbExteGtjMk5rYmk1dmNtY3ZiVzlpYVd4bEwybHVkR1Z5ZG1sbGR5OD0=")
+    static public let baseURL = "http://localhost:8080/api/"
     
     public var webService: WebService
     
@@ -85,34 +84,54 @@ class AppManager: NSObject {
         return "\(version) build \(build)"
     }
     
+    func clearData() {
+        do {
+            let realm = try Realm()
+            
+            realm.beginWrite()
+            
+            realm.deleteAll()
+            
+            try realm.commitWrite()
+            
+        } catch let error {
+            DLog("Realm clear data error \(error)")
+        }
+    }
     
     func clearDataIfNeeded() {
         if (getAppVersion() != getLastAppVersion()) {
-            
-            guard let realmURL = Realm.Configuration.defaultConfiguration.fileURL else {
-                return
-            }
-            
-            STXCacheManager.shared.clearCache()
-            
-            let realmURLs = [
-                realmURL,
-                realmURL.appendingPathExtension("lock"),
-                realmURL.appendingPathExtension("note"),
-                realmURL.appendingPathExtension("management")
-            ]
-            
-            for url in realmURLs {
-                
-                do {
-                    try FileManager.default.removeItem(at: url)
-                } catch {
-                    DLog("Attempting to delete database at: \(url.absoluteString)")
-                }
-            }
-            
+            clearDataFiles()
         }
         
         setLastAppVersion()
+    }
+    
+    func clearDataFiles() {
+        guard let realmURL = Realm.Configuration.defaultConfiguration.fileURL else {
+            return
+        }
+        
+        STXCacheManager.shared.clearCache()
+        
+        let realmURLs = [
+            realmURL,
+            realmURL.appendingPathExtension("lock"),
+            realmURL.appendingPathExtension("note"),
+            realmURL.appendingPathExtension("management")
+        ]
+        
+        for url in realmURLs {
+            
+            do {
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                DLog("Attempting to delete database at: \(url.absoluteString)")
+            }
+        }
+    }
+    
+    func authenticated() -> Bool {
+        return true // TODO: For future auth
     }
 }

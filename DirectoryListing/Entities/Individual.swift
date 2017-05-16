@@ -18,6 +18,8 @@ class Individual: BaseEntity {
     dynamic var birthdate: String = ""
     dynamic var profilePicture: String = ""
     dynamic var affiliation: String = ""
+    dynamic var id: String = ""
+    
     var forceSensitive = RealmOptional<Bool>()
     
     private var loadedProfileImage: UIImage?
@@ -25,22 +27,13 @@ class Individual: BaseEntity {
     
     private var requestedLoad : Bool = false
     
-    var id : String { // Needed for primary key
-        get {
-            return "\(lastName)-\(firstName)-\(birthdate)"
-        }
-        set {
-            // Do nothing
-        }
-    }
-    
     override class func primaryKey() -> String? {
         return "id"
     }
     
     override func mapping(map: Map) {
         super.mapping(map: map)
-        
+        id <- map["id"]
         firstName <- map["firstName"]
         lastName <- map["lastName"]
         birthdate <- map["birthdate"]
@@ -58,7 +51,7 @@ class Individual: BaseEntity {
     }
     
     func debugText() -> String {
-        return "\(self.firstName) \(self.lastName) \(self.birthdate) \(self.profilePicture) \(self.forceSensitive) \(self.affiliation)"
+        return "\(self.id) \(self.firstName) \(self.lastName) \(self.birthdate) \(self.profilePicture) \(self.forceSensitive) \(self.affiliation)"
     }
     
     func clearImage() {

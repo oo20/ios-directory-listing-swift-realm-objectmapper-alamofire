@@ -19,4 +19,5 @@ target 'DirectoryListing' do
     pod 'AlamofireObjectMapper', '~> 4.0'
     pod 'AlamofireImage', '~> 3.1'
     pod 'STXImageCache', '~> 1.0.1'
+    pod 'SwipeCellKit', '~> 1.2.1'
 end
