@@ -99,7 +99,10 @@ class WebService: REST {
     func createIndividual(_ individual: Individual, _ closureIndividual: @escaping ClosureIndividual) {
         DLog("Directory - Create Individual - URL: \(createIndividualURL)")
         
-        self.postObject(url:  createIndividualURL, dataObject: individual) { (response: Directory?) in
+        let data = Directory()
+        data.individuals.append(individual)
+        
+        self.postObject(url:  createIndividualURL, dataObject: data) { (response: Directory?) in
             
             guard let directory: Directory = response else {
                 closureIndividual(nil, nil)
@@ -130,7 +133,10 @@ class WebService: REST {
     func modifyIndividual(_ id: String, _ individual: Individual, _ closureIndividual: @escaping ClosureIndividual) {
         DLog("Directory - Modify Individuals - URL: \(modifyIndividualURL)\(id)")
         
-        self.putObject(url:  modifyIndividualURL + id, dataObject: individual) { (response: Directory?) in
+        let data = Directory()
+        data.individuals.append(individual)
+        
+        self.putObject(url:  modifyIndividualURL + id, dataObject: data) { (response: Directory?) in
             
             guard let directory: Directory = response else {
                 closureIndividual(nil, nil)

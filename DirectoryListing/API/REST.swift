@@ -40,9 +40,7 @@ class REST: NSObject {
     func postObject<T:BaseEntity>(url: String, dataObject: BaseEntity, closureObject:@escaping (T?) -> ()) where T:BaseEntity{
         DLog("Post Object URL: \(url)")
         
-        let parameters : Parameters = [
-            "individuals" : [ dataObject.toJSON() ]
-        ];
+        let parameters : Parameters = dataObject.toJSON()
         
         self.requestObject(url: url, method: .post, parameters: parameters,  closureObject: closureObject)
     }
@@ -50,9 +48,7 @@ class REST: NSObject {
     func putObject<T:BaseEntity>(url: String, dataObject: BaseEntity, closureObject:@escaping (T?) -> ()) where T:BaseEntity{
         DLog("Put Object URL: \(url)")
         
-        let parameters : Parameters = [
-            "individuals" : [ dataObject.toJSON() ]
-        ];
+        let parameters : Parameters = dataObject.toJSON()
         
         self.requestObject(url: url, method: .put, parameters: parameters, closureObject: closureObject)
     }
