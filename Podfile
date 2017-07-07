@@ -15,9 +15,10 @@ use_frameworks!
 target 'DirectoryListing' do
 	pod 'Alamofire', '~> 4.3'
 	pod 'RealmSwift', '~> 2.4.3'
-    pod 'ObjectMapper+Realm', '~> 0.2'
-    pod 'AlamofireObjectMapper', '~> 4.0'
-    pod 'AlamofireImage', '~> 3.1'
-    pod 'STXImageCache', '~> 1.0.1'
-    pod 'SwipeCellKit', '~> 1.2.1'
+	pod 'ObjectMapper+Realm', '~> 0.2'
+	pod 'AlamofireObjectMapper', '~> 4.0'
+	pod 'AlamofireImage', '~> 3.1'
+	pod 'STXImageCache', '~> 1.0.1'
+	pod 'SwipeCellKit', '~> 1.2.1'
+	pod 'CameraManager', '~> 3.1'
 end
