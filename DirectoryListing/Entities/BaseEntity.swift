@@ -46,13 +46,13 @@ class BaseEntity: Object, Mappable {
         return UIImage(data: realImageData)
     }
     
-    func getImage(url: String, closureImageFinished: @escaping ClosureImageFinished) {
+    func getImage(url: String, forceRefresh: Bool = false, closureImageFinished: @escaping ClosureImageFinished) {
         guard let requestURL = URL(string: url) else {
             closureImageFinished(UIImage(named: "Missing"))
             return
         }
         
-        STXCacheManager.shared.image(atURL: requestURL, forceRefresh: false, progress: { (percentage) in
+        STXCacheManager.shared.image(atURL: requestURL, forceRefresh: forceRefresh, progress: { (percentage) in
             
         }) { (imageData, error) in
             guard let image = self.convertDataToUIImage(imageData) else {

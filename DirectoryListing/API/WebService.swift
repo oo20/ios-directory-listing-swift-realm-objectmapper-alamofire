@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import ObjectMapper
+import Alamofire
 
 typealias ClosureIndividuals = (List<Individual>) -> ()
 typealias ClosureIndividual = (String?, Individual?) -> ()
@@ -19,6 +20,7 @@ class WebService: REST {
     let createIndividualURL = AppManager.baseURL + "individual/create"
     let modifyIndividualURL = AppManager.baseURL + "individual/modify/"
     let deleteIndividualURL = AppManager.baseURL + "individual/delete/"
+    let uploadTempFileURL = AppManager.baseURL + "tempFile/"
     
     private func getIndividuals(_ closureIndividuals: @escaping ClosureIndividuals) {
         DLog("Directory - Get Individuals - URL: \(directoryURL)")
@@ -189,5 +191,34 @@ class WebService: REST {
             }
             
         }
+    }
+    
+    func uploadTempFile(_ id: String, _ image: UIImage, _ closureFinished: @escaping ClosureFinished) {
+        
+        guard let tempImageData = UIImageJPEGRepresentation(image, AppManager.imageCompression) else {
+            return
+        }
+        
+        var imageData : Data = tempImageData.base64EncodedData()
+        
+        DLog("Directory - Upload Temp File - URL: \(uploadTempFileURL)\(id)")
+        DLog("Length of file: \(imageData.count)")
+        
+        let url = uploadTempFileURL + id
+        
+        Alamofire.upload(multipartFormData: { (multipartFormData) in
+            multipartFormData.append(imageData, withName: "tempFile", mimeType: "text/plain") // text/plain for base64
+        }, usingThreshold: 4000, to: url/*, method: .post, headers: nil*/) { (encodingResult) in
+            switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseJSON { response in
+                    debugPrint(response)
+                    closureFinished()
+                }
+                case .failure(let encodingError):
+                    print(encodingError)
+            }
+        }
+        
     }
 }

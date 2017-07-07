@@ -8,8 +8,9 @@
 
 import UIKit
 import ObjectMapper
+import CameraManager
 
-class IndividualDetailController: UIViewController {
+class IndividualDetailController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var personImageView: UIImageView?
     @IBOutlet var fullNameLabel: UILabel?
@@ -22,10 +23,17 @@ class IndividualDetailController: UIViewController {
     
     @IBOutlet var saveButton: UIButton?
     
+    @IBOutlet var personImageTapGesture: UITapGestureRecognizer?
+    @IBOutlet var captureButton: UIButton?
+    
     var individual : Individual?
     var individualIndex : Int = -1
     
     var directoryDelegate : DirectoryControllerDelegate?
+    
+    var uploadImage : UIImage?
+    
+    var cameraManager : CameraManager? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +46,10 @@ class IndividualDetailController: UIViewController {
         }
         
         fullNameTextField?.text = "\(tempIndividual.firstName) \(tempIndividual.lastName)"
+        fullNameTextField?.delegate = self
         
         affiliationTextField?.text = tempIndividual.friendlyAffiliation()
+        affiliationTextField?.delegate = self
         
         if (AppManager.shared().authenticated()) {
             fullNameTextField?.editing(true)
@@ -56,8 +66,14 @@ class IndividualDetailController: UIViewController {
             
             birthDateTextField?.text = (tempIndividual.friendlyBirthdate() ?? "Unknown")
         }
+        
+        birthDateTextField?.delegate = self
 
         personImageView?.image = nil
+        
+        personImageView?.isUserInteractionEnabled = true
+        
+        captureButton?.isHidden = true
         
         tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
             if (self.individualIndex == returnedIndex) {
@@ -65,10 +81,15 @@ class IndividualDetailController: UIViewController {
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 
     /*
@@ -102,6 +123,8 @@ class IndividualDetailController: UIViewController {
         tempIndividual.profilePicture = tempProfilePicture
         tempIndividual.forceSensitive.value = false
         
+        self.uploadImage = self.personImageView?.image
+        
         if (tempId == "") {
             AppManager.shared().webService.createIndividual(tempIndividual) { (createdIndividualId, createdIndividual) in
                 
@@ -111,12 +134,19 @@ class IndividualDetailController: UIViewController {
                 }
                 
                 DLog("Created individual \(createdId).")
-                self.directoryDelegate?.getIndividuals();
-                self.dismiss()
+                
+                if let image = self.uploadImage {
+                    AppManager.shared().webService.uploadTempFile(createdId, image, {
+                        self.recacheImageSaveDone(tempIndividual)
+                    })
+                } else {
+                    self.saveDone();
+                }
             }
             
             return
         }
+        
         AppManager.shared().webService.modifyIndividual(tempId, tempIndividual) { (modifiedIndividualId, modifiedIndividual) in
             
             guard let modifiedId = modifiedIndividualId else {
@@ -125,13 +155,112 @@ class IndividualDetailController: UIViewController {
             }
             
             DLog("Modified individual \(modifiedId).")
-            self.directoryDelegate?.getIndividuals();
-            self.dismiss()
+            
+            if let image = self.uploadImage {
+                AppManager.shared().webService.uploadTempFile(modifiedId, image, {
+                    self.recacheImageSaveDone(tempIndividual)
+                })
+            } else {
+                self.saveDone();
+            }
         }
+    }
+    
+    func recacheImageSaveDone(_ tempIndividual: Individual) {
+        tempIndividual.preloadImage(checkIndex: self.individualIndex, forceRefresh: true) { (returnedIndex) in
+            if (self.individualIndex == returnedIndex) {
+                    self.saveDone()
+            }
+        }
+    }
+    
+    func saveDone() {
+        individual?.clearImage()
+        AppManager.shared().clearData()
+        self.directoryDelegate?.getIndividuals();
+        self.dismiss()
     }
     
     func dismiss() {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func takePhoto(_ sender: UITapGestureRecognizer) {
+        DLog("Take Photo")
+        
+        if (cameraManager == nil) {
+            cameraManager = CameraManager()
+        }
+        
+        guard let manager = cameraManager else {
+            return
+        }
+        
+        if (manager.cameraIsReady == false) {
+            manager.askUserForCameraPermission { (allowed) in
+                self.startCamera(manager)
+                return
+            }
+        }
+        
+        startCamera(manager)
+    }
+    
+    func startCamera(_ manager: CameraManager) {
+        
+        guard let personView = self.personImageView else {
+            return
+        }
+        
+        _ = manager.addPreviewLayerToView(personView)
+        
+        manager.cameraDevice = .front
+        manager.cameraOutputMode = .stillImage
+        manager.cameraOutputQuality = .medium
+        
+        if (manager.hasFlash) {
+            manager.flashMode = .auto
+        } else {
+            manager.flashMode = .off
+        }
+        
+        
+        manager.writeFilesToPhoneLibrary = false
+        
+        manager.showAccessPermissionPopupAutomatically = true
 
+        captureButton?.isHidden = false
+    }
+    
+    @IBAction func capturePhoto(_ sender: UIButton) {
+        
+        guard let manager = self.cameraManager else {
+            return
+        }
+        
+        manager.capturePictureWithCompletion({ (image, error) -> Void in
+            self.personImageView?.image = image
+            self.captureButton?.isHidden = true
+            self.stopCamera()
+        })
+    }
+    
+    func stopCamera() {
+        
+        guard let manager = self.cameraManager else {
+            return
+        }
+        
+        manager.stopAndRemoveCaptureSession()
+        self.cameraManager = nil
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        
+        if (self.isMovingToParentViewController){
+            stopCamera()
+        }
+    }
 }

@@ -15,6 +15,8 @@ class AppManager: NSObject {
 
     static public let baseURL = "http://localhost:8080/api/"
     
+    static public let imageCompression : CGFloat = 95
+    
     public var webService: WebService
     
     override init() {
@@ -105,6 +107,10 @@ class AppManager: NSObject {
         }
         
         setLastAppVersion()
+    }
+    
+    func clearImageCache() {
+        STXCacheManager.shared.clearCache()
     }
     
     func clearDataFiles() {

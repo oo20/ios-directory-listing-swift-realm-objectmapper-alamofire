@@ -60,7 +60,11 @@ class Individual: BaseEntity {
         self.requestedLoad = false
     }
     
-    func preloadImage(checkIndex: Int, finished: @escaping ClosureIndexFinished) {
+    func preloadImage(checkIndex: Int, forceRefresh: Bool = false, finished: @escaping ClosureIndexFinished) {
+        
+        if (forceRefresh == true) {
+            clearImage()
+        }
         
         if (loadedProfileImage != nil && loadedProfileThumbnailImage != nil) {
             DLog("image already loaded in memory for key: \(self.id)")
@@ -75,7 +79,7 @@ class Individual: BaseEntity {
         
         self.requestedLoad = true
 
-        self.getImage(url: profilePicture) { (image) in
+        self.getImage(url: profilePicture, forceRefresh: forceRefresh) { (image) in
         
             self.loadedProfileImage = image
             

@@ -91,9 +91,13 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TRU-Iu-xD3">
                                 <rect key="frame" x="0.0" y="89" width="375" height="370"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="370" id="MDh-Hl-k7j"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="A8U-6o-Ds6" appends="YES" id="2Dy-v2-HU5"/>
+                                </connections>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baZ-KQ-IH2">
                                 <rect key="frame" x="16" y="491" width="89" height="21"/>
@@ -142,6 +146,15 @@
                                     <action selector="save:" destination="Mwv-wQ-JpT" eventType="touchUpInside" id="Tbp-Fl-P7p"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M1C-7S-qcE">
+                                <rect key="frame" x="0.0" y="401" width="375" height="58"/>
+                                <state key="normal" title="Capture">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="capturePhoto:" destination="Mwv-wQ-JpT" eventType="touchUpInside" id="Pit-zx-PTW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -152,19 +165,23 @@
                             <constraint firstItem="TRU-Iu-xD3" firstAttribute="top" secondItem="UQ5-QN-hSa" secondAttribute="bottom" constant="25" id="8qO-Df-F2v"/>
                             <constraint firstItem="baZ-KQ-IH2" firstAttribute="leading" secondItem="8G4-Xk-Gdi" secondAttribute="leadingMargin" id="BLI-4S-aXh"/>
                             <constraint firstItem="baZ-KQ-IH2" firstAttribute="leading" secondItem="t0v-Ep-q4Y" secondAttribute="leading" id="QfT-V9-gMP"/>
+                            <constraint firstItem="M1C-7S-qcE" firstAttribute="top" secondItem="UQ5-QN-hSa" secondAttribute="bottom" constant="337" id="Rs4-Lz-UYx"/>
                             <constraint firstItem="t0v-Ep-q4Y" firstAttribute="centerY" secondItem="2qe-nA-0YI" secondAttribute="centerY" id="Vfy-Be-zPd"/>
                             <constraint firstItem="2qe-nA-0YI" firstAttribute="leading" secondItem="t0v-Ep-q4Y" secondAttribute="trailing" constant="8" id="ZUx-ae-KBb"/>
                             <constraint firstItem="rPy-Oa-SN0" firstAttribute="leading" secondItem="2qe-nA-0YI" secondAttribute="leading" id="aLk-Bi-ed1"/>
                             <constraint firstItem="2qe-nA-0YI" firstAttribute="leading" secondItem="ceH-ie-rl0" secondAttribute="leading" id="b77-Wb-Beg"/>
                             <constraint firstItem="2qe-nA-0YI" firstAttribute="trailing" secondItem="ceH-ie-rl0" secondAttribute="trailing" id="cGS-xn-V33"/>
                             <constraint firstItem="rPy-Oa-SN0" firstAttribute="top" secondItem="TRU-Iu-xD3" secondAttribute="bottom" constant="28" id="cyu-C4-qaI"/>
+                            <constraint firstAttribute="trailing" secondItem="M1C-7S-qcE" secondAttribute="trailing" id="ekn-tn-AVg"/>
                             <constraint firstItem="4da-fP-ccY" firstAttribute="centerY" secondItem="ceH-ie-rl0" secondAttribute="centerY" id="hNd-jC-Pg5"/>
                             <constraint firstItem="2qe-nA-0YI" firstAttribute="top" secondItem="rPy-Oa-SN0" secondAttribute="bottom" constant="17" id="lbh-Bo-SGy"/>
                             <constraint firstItem="rPy-Oa-SN0" firstAttribute="leading" secondItem="baZ-KQ-IH2" secondAttribute="trailing" constant="8" id="m14-Ry-4wK"/>
+                            <constraint firstItem="M1C-7S-qcE" firstAttribute="leading" secondItem="8G4-Xk-Gdi" secondAttribute="leading" id="pVt-Zj-pYP"/>
                             <constraint firstItem="ceH-ie-rl0" firstAttribute="leading" secondItem="4da-fP-ccY" secondAttribute="trailing" constant="8" id="rIU-qM-4cc"/>
                             <constraint firstItem="TRU-Iu-xD3" firstAttribute="leading" secondItem="8G4-Xk-Gdi" secondAttribute="leading" id="sf6-ty-ovp"/>
                             <constraint firstAttribute="trailing" secondItem="TRU-Iu-xD3" secondAttribute="trailing" id="vdl-da-Khi"/>
                             <constraint firstItem="baZ-KQ-IH2" firstAttribute="centerY" secondItem="rPy-Oa-SN0" secondAttribute="centerY" id="wDM-Yp-pEr"/>
+                            <constraint firstItem="rPy-Oa-SN0" firstAttribute="top" secondItem="M1C-7S-qcE" secondAttribute="bottom" constant="28" id="zhd-BJ-kT6"/>
                         </constraints>
                     </view>
                     <connections>
@@ -172,13 +189,20 @@
                         <outlet property="affiliationTextField" destination="ceH-ie-rl0" id="hFf-mo-XEj"/>
                         <outlet property="birthDateLabel" destination="t0v-Ep-q4Y" id="CFO-s3-CjX"/>
                         <outlet property="birthDateTextField" destination="2qe-nA-0YI" id="8tB-F5-swJ"/>
+                        <outlet property="captureButton" destination="M1C-7S-qcE" id="RVg-gT-4Al"/>
                         <outlet property="fullNameLabel" destination="baZ-KQ-IH2" id="9Sl-Sl-EZw"/>
                         <outlet property="fullNameTextField" destination="rPy-Oa-SN0" id="Rhm-wG-ntn"/>
+                        <outlet property="personImageTapGesture" destination="A8U-6o-Ds6" id="yOw-oc-LPn"/>
                         <outlet property="personImageView" destination="TRU-Iu-xD3" id="5t9-UE-m86"/>
                         <outlet property="saveButton" destination="MvO-wc-TDU" id="MSV-vB-HHD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4EN-a0-8Qw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="A8U-6o-Ds6">
+                    <connections>
+                        <action selector="takePhoto:" destination="Mwv-wQ-JpT" id="Ady-AX-CKL"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1664.8" y="131.78410794602701"/>
         </scene>
