@@ -28,6 +28,7 @@
 		11D0C3791E5D34D000C1C0CE /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3781E5D34D000C1C0CE /* StringExtension.swift */; };
 		11D0C37B1E5D35DC00C1C0CE /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C37A1E5D35DC00C1C0CE /* DateExtension.swift */; };
 		11EEF28A1ECA6949000AC0A5 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EEF2891ECA6949000AC0A5 /* ImageExtension.swift */; };
+		11F45C8E1F1EB5690038BB7E /* ScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F45C8D1F1EB5690038BB7E /* ScrollViewController.swift */; };
 		9320B84F76B2130857705750 /* Pods_DirectoryListing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54999998BC5EDE922E7D68A4 /* Pods_DirectoryListing.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,7 @@
 		11D0C3781E5D34D000C1C0CE /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Extensions/StringExtension.swift; sourceTree = "<group>"; };
 		11D0C37A1E5D35DC00C1C0CE /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = Extensions/DateExtension.swift; sourceTree = "<group>"; };
 		11EEF2891ECA6949000AC0A5 /* ImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageExtension.swift; path = Extensions/ImageExtension.swift; sourceTree = "<group>"; };
+		11F45C8D1F1EB5690038BB7E /* ScrollViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScrollViewController.swift; path = General/ScrollViewController.swift; sourceTree = "<group>"; };
 		54999998BC5EDE922E7D68A4 /* Pods_DirectoryListing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DirectoryListing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8200C559FF6EE6E961DB605 /* Pods-DirectoryListing.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DirectoryListing.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DirectoryListing/Pods-DirectoryListing.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 				1142628F1E5E4FE5007815EA /* Alias */,
 				11D0C3701E5D08D000C1C0CE /* Entities */,
 				11D0C36A1E5D029900C1C0CE /* API */,
+				11F45C8C1F1EB4DE0038BB7E /* General */,
 				11D0C35B1E5CFBC900C1C0CE /* Directory */,
 			);
 			path = DirectoryListing;
@@ -173,6 +176,14 @@
 				1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		11F45C8C1F1EB4DE0038BB7E /* General */ = {
+			isa = PBXGroup;
+			children = (
+				11F45C8D1F1EB5690038BB7E /* ScrollViewController.swift */,
+			);
+			name = General;
 			sourceTree = "<group>";
 		};
 		6216CF7666AA29804D3D1AA3 /* Pods */ = {
@@ -330,6 +341,7 @@
 				11205EC51E5CF32300FD7D1D /* ViewController.swift in Sources */,
 				1142628E1E5E294F007815EA /* WebService.swift in Sources */,
 				11205EC31E5CF32300FD7D1D /* AppDelegate.swift in Sources */,
+				11F45C8E1F1EB5690038BB7E /* ScrollViewController.swift in Sources */,
 				11CAEAA01E70996300CBCCCD /* README.md in Sources */,
 				11D0C3791E5D34D000C1C0CE /* StringExtension.swift in Sources */,
 				11D0C3741E5D0DA100C1C0CE /* Directory.swift in Sources */,

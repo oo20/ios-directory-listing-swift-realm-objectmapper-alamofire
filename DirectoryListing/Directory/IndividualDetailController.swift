@@ -10,7 +10,7 @@ import UIKit
 import ObjectMapper
 import CameraManager
 
-class IndividualDetailController: UIViewController, UITextFieldDelegate {
+class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
     
     @IBOutlet var personImageView: UIImageView?
     @IBOutlet var fullNameLabel: UILabel?
@@ -25,6 +25,8 @@ class IndividualDetailController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var personImageTapGesture: UITapGestureRecognizer?
     @IBOutlet var captureButton: UIButton?
+    
+    @IBOutlet var individualDetailsView: UIView?
     
     var individual : Individual?
     var individualIndex : Int = -1
@@ -80,6 +82,10 @@ class IndividualDetailController: UIViewController, UITextFieldDelegate {
                 self.personImageView!.image = tempIndividual.profileDetailImage()
             }
         }
+        
+        positionScrollViewTopCenter()
+        
+        registerKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
@@ -201,9 +207,10 @@ class IndividualDetailController: UIViewController, UITextFieldDelegate {
                 self.startCamera(manager)
                 return
             }
+        } else {
+            startCamera(manager)
         }
         
-        startCamera(manager)
     }
     
     func startCamera(_ manager: CameraManager) {
@@ -257,10 +264,13 @@ class IndividualDetailController: UIViewController, UITextFieldDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         
+        super.unregisterKeyboardNotifications()
+        
         super.viewWillDisappear(animated)
         
         if (self.isMovingToParentViewController){
             stopCamera()
         }
     }
+    
 }
