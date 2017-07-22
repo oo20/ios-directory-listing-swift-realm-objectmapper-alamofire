@@ -18,6 +18,7 @@ class Individual: BaseEntity {
     dynamic var birthdate: String = ""
     dynamic var profilePicture: String = ""
     dynamic var affiliation: String = ""
+    dynamic var imageCheck: String = ""
     dynamic var id: String = ""
     
     var forceSensitive = RealmOptional<Bool>()
@@ -40,6 +41,7 @@ class Individual: BaseEntity {
         profilePicture <- map["profilePicture"]
         forceSensitive <- map["forceSensitive"]
         affiliation <- map["affiliation"]
+        imageCheck <- map["imageCheck"]
     }
     
     func friendlyBirthdate() -> String? {
@@ -51,7 +53,7 @@ class Individual: BaseEntity {
     }
     
     func debugText() -> String {
-        return "\(self.id) \(self.firstName) \(self.lastName) \(self.birthdate) \(self.profilePicture) \(self.forceSensitive) \(self.affiliation)"
+        return "\(self.id) \(self.firstName) \(self.lastName) \(self.birthdate) \(self.profilePicture) \(self.forceSensitive) \(self.affiliation) \(self.imageCheck)"
     }
     
     func clearImage() {
@@ -79,7 +81,7 @@ class Individual: BaseEntity {
         
         self.requestedLoad = true
 
-        self.getImage(url: profilePicture, forceRefresh: forceRefresh) { (image) in
+        self.getImage(url: profilePicture + "?imageCheck=" + imageCheck, forceRefresh: forceRefresh) { (image) in
         
             self.loadedProfileImage = image
             

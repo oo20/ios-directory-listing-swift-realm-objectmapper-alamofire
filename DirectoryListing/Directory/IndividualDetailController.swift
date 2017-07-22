@@ -77,10 +77,14 @@ class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
         
         captureButton?.isHidden = true
         
-        tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
-            if (self.individualIndex == returnedIndex) {
-                self.personImageView!.image = tempIndividual.profileDetailImage()
+        if (tempIndividual.profilePicture.isEmpty == false) {
+            tempIndividual.preloadImage(checkIndex: self.individualIndex) { (returnedIndex) in
+                if (self.individualIndex == returnedIndex) {
+                    self.personImageView!.image = tempIndividual.profileDetailImage()
+                }
             }
+        } else {
+            personImageView?.image = UIImage(named: "Missing");
         }
         
         positionScrollViewTopCenter()
@@ -133,17 +137,18 @@ class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
         
         if (tempId == "") {
             AppManager.shared().webService.createIndividual(tempIndividual) { (createdIndividualId, createdIndividual) in
-                
                 guard let createdId = createdIndividualId else {
                     DLog("Failed to create individual.")
                     return
                 }
                 
+                self.individual = createdIndividual
+                
                 DLog("Created individual \(createdId).")
                 
                 if let image = self.uploadImage {
                     AppManager.shared().webService.uploadTempFile(createdId, image, {
-                        self.recacheImageSaveDone(tempIndividual)
+                        self.saveDone()
                     })
                 } else {
                     self.saveDone();
@@ -164,7 +169,7 @@ class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
             
             if let image = self.uploadImage {
                 AppManager.shared().webService.uploadTempFile(modifiedId, image, {
-                    self.recacheImageSaveDone(tempIndividual)
+                    self.saveDone()
                 })
             } else {
                 self.saveDone();
@@ -174,9 +179,7 @@ class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
     
     func recacheImageSaveDone(_ tempIndividual: Individual) {
         tempIndividual.preloadImage(checkIndex: self.individualIndex, forceRefresh: true) { (returnedIndex) in
-            if (self.individualIndex == returnedIndex) {
-                    self.saveDone()
-            }
+            self.saveDone()
         }
     }
     
