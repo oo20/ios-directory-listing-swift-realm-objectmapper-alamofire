@@ -98,7 +98,15 @@ class IndividualDetailController: ScrollViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        
+        if (textField == fullNameTextField) {
+            birthDateTextField?.becomeFirstResponder()
+        } else if (textField == birthDateTextField) {
+            affiliationTextField?.becomeFirstResponder()
+        } else if (textField == affiliationTextField) {
+            affiliationTextField?.resignFirstResponder()
+        }
+        
         return true
     }
 
