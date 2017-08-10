@@ -8,16 +8,25 @@
 
 import UIKit
 import RealmSwift
-import STXImageCache
+import Cache
 
 class AppManager: NSObject {
     static private var appManager: AppManager? = nil
 
-    static public let baseURL = "http://localhost:8080/api/"
+    static public let serverURL = "https://locahost:8443"
     
+    static public let allowInvalidCert = true
+    
+    static public let baseURL = serverURL + "/api/"
+    
+    static public let user = "test"; // Temporary user until login UI is built.
+    static public let password = "test"; // Temporary password until login UI is built.
+
     static public let imageCompression : CGFloat = 95
     
     public var webService: WebService
+    
+    public var imageCache = AppManager.initImageCache()
     
     override init() {
         self.webService = WebService()
@@ -27,24 +36,19 @@ class AppManager: NSObject {
         if (AppManager.appManager == nil) {
             AppManager.appManager = AppManager()
             AppManager.appManager?.clearDataIfNeeded()
-            
-            AppManager.appManager?.initImageCache()
         }
         
         return AppManager.appManager!
     }
     
-    func initImageCache() {
-        var diskConfig = STXDiskCacheConfig()
-        diskConfig.enabled = true
-        diskConfig.cacheExpirationTime = 7 // in days, 0 = never (dependent on iOS)
-        STXCacheManager.shared.diskCacheConfig = diskConfig
-        
-        var memoryConfig = STXMemoryCacheConfig()
-        
-        memoryConfig.enabled = true
-        memoryConfig.maximumMemoryCacheSize = 0 // in megabytes, 0 = unlimited
-        STXCacheManager.shared.memoryCacheConfig = memoryConfig
+    static func initImageCache() -> Cache<UIImage> {
+        return Cache<UIImage>(name: "ImageCache", config: Config(
+            frontKind: .memory,
+            backKind: .disk,
+            expiry: .date(Date().addingTimeInterval(60*60*24)),
+            maxSize: 100000000,
+            maxObjects: 10000
+        ))
     }
     
     static func decodeURL(_ text: String) -> String {
@@ -110,7 +114,7 @@ class AppManager: NSObject {
     }
     
     func clearImageCache() {
-        STXCacheManager.shared.clearCache()
+        imageCache.clear()
     }
     
     func clearDataFiles() {
@@ -118,7 +122,7 @@ class AppManager: NSObject {
             return
         }
         
-        STXCacheManager.shared.clearCache()
+        imageCache.clear()
         
         let realmURLs = [
             realmURL,

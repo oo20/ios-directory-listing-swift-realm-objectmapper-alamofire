@@ -11,12 +11,18 @@ import ObjectMapper
 import Alamofire
 import Realm
 import RealmSwift
-import STXImageCache
+import AlamofireImage
+import Cache
 
 typealias ClosureImageFinished = (UIImage?) -> ()
 typealias ClosureIndexFinished = (Int) -> ()
 typealias ClosureFinished = () -> ()
 
+extension ImageDownloader {
+    func downloadImage(_ urlRequest: URLRequestConvertible, completion: CompletionHandler?) {
+        self.download(urlRequest, completion: completion)
+    }
+}
 
 class BaseEntity: Object, Mappable {
     
@@ -51,15 +57,28 @@ class BaseEntity: Object, Mappable {
             closureImageFinished(UIImage(named: "Missing"))
             return
         }
-        
-        STXCacheManager.shared.image(atURL: requestURL, forceRefresh: forceRefresh, progress: { (percentage) in
+                
+        let url : String = requestURL.absoluteString as String
             
-        }) { (imageData, error) in
-            guard let image = self.convertDataToUIImage(imageData) else {
+        AppManager.shared().imageCache.object(url.sha256()) { (loadImage: UIImage?) -> Void in
+            if (loadImage == nil) {
+                AppManager.shared().webService.manager.request(requestURL, method: .get).responseImage { response in
+                    guard let image = response.result.value else {
+                        DLog("Failed to download image: \(url)")
+
+                        return
+                    }
+                    
+                    AppManager.shared().imageCache.add(url.sha256(), object: image)
+                    
+                    DLog("Downloaded new image and cached: \(url)")
+                    closureImageFinished(image)
+                }
                 return
             }
-            DLog("fetch new or cached image: \(url)")
-            closureImageFinished(image)
+            DLog("Fetched cached image: \(url)")
+            closureImageFinished(loadImage)
+            
         }
         
     }

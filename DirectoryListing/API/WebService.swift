@@ -206,12 +206,14 @@ class WebService: REST {
         
         let url = uploadTempFileURL + id
         
-        Alamofire.upload(multipartFormData: { (multipartFormData) in
+        manager.upload(multipartFormData: { (multipartFormData) in
             multipartFormData.append(imageData, withName: "tempFile", mimeType: "text/plain") // text/plain for base64
-        }, usingThreshold: 4000, to: url/*, method: .post, headers: nil*/) { (encodingResult) in
+        }, usingThreshold: 4000, to: url) { (encodingResult) in
             switch encodingResult {
                 case .success(let upload, _, _):
-                    upload.responseJSON { response in
+                    upload
+                    .authenticate(user: self.user, password: self.password)
+                    .responseJSON { response in
                     debugPrint(response)
                     closureFinished()
                 }

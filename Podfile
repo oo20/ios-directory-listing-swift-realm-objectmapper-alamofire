@@ -6,7 +6,6 @@
 #Using ObjectMapper+Realm (0.2)
 #Using Realm (2.4.3)
 #Using RealmSwift (2.4.3)
-#Using STXImageCache (1.0.2)
 
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
@@ -18,7 +17,7 @@ target 'DirectoryListing' do
 	pod 'ObjectMapper+Realm', '~> 0.2'
 	pod 'AlamofireObjectMapper', '~> 4.0'
 	pod 'AlamofireImage', '~> 3.1'
-	pod 'STXImageCache', '~> 1.0.1'
+	pod 'Cache', '~> 2.2.1'
 	pod 'SwipeCellKit', '~> 1.2.1'
 	pod 'CameraManager', '~> 3.1'
 end

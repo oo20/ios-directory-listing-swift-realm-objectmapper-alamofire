@@ -15,6 +15,7 @@
 		1142628E1E5E294F007815EA /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1142628D1E5E294F007815EA /* WebService.swift */; };
 		114262911E5E5016007815EA /* LogCleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114262901E5E5016007815EA /* LogCleanup.swift */; };
 		1151F9411ECB7846001A58C2 /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */; };
+		1169F3491F3566E600756EAE /* SessionManagerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1169F3481F3566E600756EAE /* SessionManagerBuilder.swift */; };
 		11CAEAA01E70996300CBCCCD /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 11CAEA9F1E70996300CBCCCD /* README.md */; };
 		11D0C3631E5CFEDE00C1C0CE /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */; };
 		11D0C3671E5D001600C1C0CE /* Directory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11D0C3641E5D001600C1C0CE /* Directory.storyboard */; };
@@ -44,6 +45,7 @@
 		1142628D1E5E294F007815EA /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebService.swift; path = API/WebService.swift; sourceTree = "<group>"; };
 		114262901E5E5016007815EA /* LogCleanup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogCleanup.swift; path = Alias/LogCleanup.swift; sourceTree = "<group>"; };
 		1151F9401ECB7846001A58C2 /* UITextFieldExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITextFieldExtension.swift; path = Extensions/UITextFieldExtension.swift; sourceTree = "<group>"; };
+		1169F3481F3566E600756EAE /* SessionManagerBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SessionManagerBuilder.swift; path = General/SessionManagerBuilder.swift; sourceTree = "<group>"; };
 		11CAEA9F1E70996300CBCCCD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		11D0C3621E5CFEDE00C1C0CE /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppManager.swift; path = Shared/AppManager.swift; sourceTree = "<group>"; };
 		11D0C3641E5D001600C1C0CE /* Directory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Directory.storyboard; path = Directory/Directory.storyboard; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				11F45C8D1F1EB5690038BB7E /* ScrollViewController.swift */,
+				1169F3481F3566E600756EAE /* SessionManagerBuilder.swift */,
 			);
 			name = General;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				11D0C37B1E5D35DC00C1C0CE /* DateExtension.swift in Sources */,
 				11D0C36D1E5D04FB00C1C0CE /* REST.swift in Sources */,
 				114262911E5E5016007815EA /* LogCleanup.swift in Sources */,
+				1169F3491F3566E600756EAE /* SessionManagerBuilder.swift in Sources */,
 				11D0C3761E5D2DB500C1C0CE /* IndividualDetailController.swift in Sources */,
 				1151F9411ECB7846001A58C2 /* UITextFieldExtension.swift in Sources */,
 				11D0C36F1E5D089300C1C0CE /* BaseEntity.swift in Sources */,

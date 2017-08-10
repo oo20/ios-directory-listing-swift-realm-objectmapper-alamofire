@@ -14,13 +14,26 @@ import RealmSwift
 
 class REST: NSObject {
     
+    var user = AppManager.user
+    var password = AppManager.password
+    
+    public var manager: Alamofire.SessionManager = Alamofire.SessionManager()
+    
+    override init() {
+        super.init()
+        
+        manager = AppManager.allowInvalidCert == true ? SessionManagerBuilder.sessionManagerAllowInvalidCerts() : SessionManagerBuilder.sessionManagerAllowOnlyValidCerts()
+    }
+    
     private func requestObject<T:BaseEntity>(url: String, method: HTTPMethod, parameters: Parameters? = nil, closureObject:@escaping (T?) -> ()) where T:BaseEntity{
         
         let urlObject : URL = URL(string: url)!
         
         let encoding : ParameterEncoding = JSONEncoding.default
         
-        Alamofire.request(urlObject, method: method, parameters: parameters, encoding: encoding).responseObject { (response: DataResponse<T>) in
+        manager.request(urlObject, method: method, parameters: parameters, encoding: encoding)
+            .authenticate(user: user, password: password)
+            .responseObject { (response: DataResponse<T>) in
             
             guard let object: T = response.result.value else {
                 closureObject(nil)
@@ -68,4 +81,5 @@ class REST: NSObject {
         
         return converted
     }
+    
 }
