@@ -19,6 +19,7 @@ class DirectoryController: UITableViewController , SwipeTableViewCellDelegate, D
     var individuals : List<Individual> = List<Individual> ()
     var selectedIndividual : Individual? = nil
     var selectedIndividualIndex : Int = -1
+    var deleteImage : UIImage? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +33,13 @@ class DirectoryController: UITableViewController , SwipeTableViewCellDelegate, D
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        getIndividuals()
+        DispatchQueue.main.async { // Fetching a system image requires main thread now in iOS 11.
+            self.deleteImage = UIImage.getSystemImage(UIBarButtonSystemItem.trash)
+        }
+        
+        DispatchQueue.main.async { // Get individuals after system image fetched.
+            self.getIndividuals()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,7 +82,6 @@ class DirectoryController: UITableViewController , SwipeTableViewCellDelegate, D
         directoryCell.individualIndex = indexPath.row
         directoryCell.individual = individuals[indexPath.row]
         directoryCell.displayData()
-        
         return cell
     }
 
@@ -180,7 +186,7 @@ class DirectoryController: UITableViewController , SwipeTableViewCellDelegate, D
         }
 
         // customize the action appearance
-        deleteAction.image = UIImage.getSystemImage(UIBarButtonSystemItem.trash)
+        deleteAction.image = deleteImage
 
         return [deleteAction]
     }
