@@ -13,7 +13,7 @@ import Cache
 class AppManager: NSObject {
     static private var appManager: AppManager? = nil
 
-    static public let serverURL = "https://locahost:8443"
+    static public let serverURL = "https://localhost:8443"
     
     static public let allowInvalidCert = true
     
@@ -41,14 +41,25 @@ class AppManager: NSObject {
         return AppManager.appManager!
     }
     
-    static func initImageCache() -> Cache<UIImage> {
-        return Cache<UIImage>(name: "ImageCache", config: Config(
-            frontKind: .memory,
-            backKind: .disk,
-            expiry: .date(Date().addingTimeInterval(60*60*24)),
+    static func initImageCache() -> Storage? {
+        
+        let expirationDate: Expiry = Expiry.date(Date().addingTimeInterval(60*60*24))
+        
+        let diskConfig = DiskConfig(
+            name: "ImageCache",
+            expiry: expirationDate,
             maxSize: 100000000,
-            maxObjects: 10000
-        ))
+            directory: nil,
+            protectionType: .complete
+        )
+        
+        let memoryConfig = MemoryConfig(
+            expiry: expirationDate,
+            countLimit: 1000,
+            totalCostLimit: 0
+        )
+        
+        return try? Storage(diskConfig: diskConfig, memoryConfig: memoryConfig)
     }
     
     static func decodeURL(_ text: String) -> String {
@@ -114,7 +125,7 @@ class AppManager: NSObject {
     }
     
     func clearImageCache() {
-        imageCache.clear()
+        try! imageCache?.removeAll()
     }
     
     func clearDataFiles() {
@@ -122,8 +133,8 @@ class AppManager: NSObject {
             return
         }
         
-        imageCache.clear()
-        
+        try! imageCache?.removeAll()
+
         let realmURLs = [
             realmURL,
             realmURL.appendingPathExtension("lock"),

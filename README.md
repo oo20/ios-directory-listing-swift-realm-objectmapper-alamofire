@@ -11,7 +11,7 @@ Instructions:
 If you have permission, install the NodeJS sample server locally on your computer.  Follow readme instructions located at:
 https://github.com/oo20/nodejs-csv-to-json-api-directory-listing-server
 
-Then make sure you have cocoapods and XCode 9.3 (9E145) installed.
+Then make sure you have cocoapods and XCode 9.3 (9E145) installed (uses Swift 4.1).
 pod install
 Open the workspace with XCode.
 Configure the server IP address within the AppManager class.

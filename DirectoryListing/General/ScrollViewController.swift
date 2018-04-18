@@ -58,7 +58,7 @@ class ScrollViewController: UIViewController {
     }
     
     
-    func keyboardDidShow(notification: NSNotification) {
+    @objc func keyboardDidShow(notification: NSNotification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardInfo = userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue
         let keyboardSize = keyboardInfo.cgRectValue.size
@@ -73,7 +73,7 @@ class ScrollViewController: UIViewController {
         self.scrollView?.scrollIndicatorInsets = contentInset
     }
     
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         guard var contentInset = self.scrollView?.contentInset else {
             return
         }

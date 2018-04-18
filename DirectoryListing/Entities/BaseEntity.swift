@@ -13,6 +13,7 @@ import Realm
 import RealmSwift
 import AlamofireImage
 import Cache
+import CryptoSwift
 
 typealias ClosureImageFinished = (UIImage?) -> ()
 typealias ClosureIndexFinished = (Int) -> ()
@@ -59,26 +60,24 @@ class BaseEntity: Object, Mappable {
         }
                 
         let url : String = requestURL.absoluteString as String
+        
+        if let loadImage = (try? AppManager.shared().imageCache?.object(ofType: ImageWrapper.self, forKey: url.sha256()).image) {
             
-        AppManager.shared().imageCache.object(url.sha256()) { (loadImage: UIImage?) -> Void in
-            if (loadImage == nil) {
-                AppManager.shared().webService.manager.request(requestURL, method: .get).responseImage { response in
-                    guard let image = response.result.value else {
-                        DLog("Failed to download image: \(url)")
-
-                        return
-                    }
-                    
-                    AppManager.shared().imageCache.add(url.sha256(), object: image)
-                    
-                    DLog("Downloaded new image and cached: \(url)")
-                    closureImageFinished(image)
-                }
-                return
-            }
             DLog("Fetched cached image: \(url)")
             closureImageFinished(loadImage)
+        }
+        
+        AppManager.shared().webService.manager.request(requestURL, method: .get).responseImage { response in
+            guard let image = response.result.value else {
+                DLog("Failed to download image: \(url)")
+                
+                return
+            }
             
+            try? AppManager.shared().imageCache?.setObject(ImageWrapper(image: image), forKey: url.sha256())
+            
+            DLog("Downloaded new image and cached: \(url)")
+            closureImageFinished(image)
         }
         
     }

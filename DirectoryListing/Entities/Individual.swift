@@ -13,13 +13,13 @@ import RealmSwift
 import AlamofireImage
 
 class Individual: BaseEntity {
-    dynamic var firstName: String = ""
-    dynamic var lastName: String = ""
-    dynamic var birthdate: String = ""
-    dynamic var profilePicture: String = ""
-    dynamic var affiliation: String = ""
-    dynamic var imageCheck: String = ""
-    dynamic var id: String = ""
+    @objc dynamic var id: String = ""
+    @objc dynamic var firstName: String = ""
+    @objc dynamic var lastName: String = ""
+    @objc dynamic var birthdate: String = ""
+    @objc dynamic var profilePicture: String = ""
+    @objc dynamic var affiliation: String = ""
+    @objc dynamic var imageCheck: String = ""
     
     var forceSensitive = RealmOptional<Bool>()
     
